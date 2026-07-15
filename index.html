@@ -3,492 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From ChatGPT to Robots: A Beginner's Introduction to Vision-Language-Action Models</title>
-<meta name="description" content="How VLA models let robots see the world, understand plain-English instructions, and act — built up step by step from the LLM you already know.">
+<title>Srivenkateshwar — Under construction</title>
+<meta name="description" content="Personal site of Srivenkateshwar — under development. Read the blog in the meantime.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy: #232B3E;
     --navy-deep: #1A2130;
-    --paper: #FAFAF7;
-    --ink: #26282E;
-    --ink-soft: #5B5F6A;
-    --line: #E3E1D9;
-    --accent: #C6402E;
-    --card: #FFFFFF;
-    --max: 720px;
+    --steel: #3B4459;
+    --mist: #A9B2C6;
+    --paper: #F2F3F6;
+    --accent: #E8734F;
+    --red: #C6402E;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body {
-    font-family: "IBM Plex Sans", -apple-system, sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 17px;
-    line-height: 1.75;
-  }
-  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  a:hover { text-decoration-thickness: 2px; }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
-
-  .masthead {
     background: var(--navy);
-    color: #F2F3F6;
-    padding: 72px 24px 64px;
-  }
-  .masthead-inner { max-width: var(--max); margin: 0 auto; }
-  .brand-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 34px;
-  }
-  .brand-logo {
-    height: 36px;
-    width: auto;
-    background: #FFFFFF;
-    border-radius: 6px;
-    padding: 4px 8px;
-  }
-  .brand-name {
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 500;
-    font-size: 15px;
-    color: #C4CAD8;
-    letter-spacing: 0.02em;
-  }
-  .eyebrow {
+    color: var(--paper);
     font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #A9B2C6;
-    margin-bottom: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
   }
-  .eyebrow b { color: #E8734F; font-weight: 500; }
+  .scene { width: min(420px, 82vw); margin-bottom: 40px; }
+  .scene svg { width: 100%; height: auto; display: block; }
+
   h1 {
     font-family: "Space Grotesk", sans-serif;
     font-weight: 700;
-    font-size: clamp(30px, 5.4vw, 46px);
-    line-height: 1.14;
-    letter-spacing: -0.015em;
-    max-width: 16em;
-  }
-  .dek {
-    margin-top: 22px;
-    font-size: 19px;
-    line-height: 1.6;
-    color: #C4CAD8;
-    max-width: 34em;
-  }
-  .meta {
-    margin-top: 30px;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    color: #8B94A9;
-  }
-
-  main { max-width: var(--max); margin: 0 auto; padding: 56px 24px 40px; }
-  section { margin-bottom: 56px; }
-  h2 {
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 700;
-    font-size: 27px;
-    line-height: 1.25;
+    font-size: clamp(26px, 5vw, 38px);
     letter-spacing: -0.01em;
-    margin-bottom: 18px;
-    color: var(--navy);
+    margin-bottom: 14px;
   }
-  h3 {
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 500;
-    font-size: 20px;
-    margin: 28px 0 10px;
-    color: var(--navy);
-  }
-  p { margin-bottom: 18px; }
-  p:last-child { margin-bottom: 0; }
-  strong { font-weight: 600; }
-  ul, ol { margin: 0 0 18px 1.3em; }
-  li { margin-bottom: 8px; }
-  code {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.88em;
-    background: #EFEDE5;
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
-
-  .step-tag {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    letter-spacing: 0.16em;
+  .status {
+    font-size: 14px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent);
-    display: block;
-    margin-bottom: 8px;
+    margin-bottom: 22px;
   }
-
-  .lede { font-size: 20px; line-height: 1.7; color: var(--ink); }
-  .hook {
-    border-left: 3px solid var(--accent);
-    padding: 4px 0 4px 20px;
-    font-size: 21px;
-    line-height: 1.55;
-    font-style: italic;
-    color: var(--navy);
-    margin-bottom: 26px;
+  .status .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: 1px;
   }
-
-  figure {
-    margin: 30px 0;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 26px 18px 14px;
+  .note {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--mist);
+    max-width: 34em;
+    margin-bottom: 34px;
   }
-  figure svg { width: 100%; height: auto; display: block; }
-  figcaption {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    text-align: center;
-    padding: 12px 10px 6px;
-    line-height: 1.6;
-  }
-  figcaption b { color: var(--navy); font-weight: 500; }
-
-  .takeaway {
-    background: #F0EFE9;
-    border-radius: 10px;
-    padding: 18px 22px;
-    margin: 22px 0;
-    font-size: 17px;
-  }
-  .takeaway .step-tag { color: var(--navy); margin-bottom: 4px; }
-
-  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0; }
-  .pillar {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 18px;
-  }
-  .pillar h4 {
+  .blog-btn {
+    display: inline-block;
     font-family: "Space Grotesk", sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-  }
-  .pillar p { font-size: 15px; color: var(--ink-soft); line-height: 1.6; margin: 0; }
-  @media (max-width: 640px) { .pillars { grid-template-columns: 1fr; } }
-
-  .resource-list { list-style: none; margin-left: 0; }
-  .resource-list li {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
+    font-weight: 500;
     font-size: 16px;
+    color: #FFFFFF;
+    background: var(--red);
+    text-decoration: none;
+    padding: 14px 30px;
+    border-radius: 999px;
+    transition: transform 0.15s, background 0.15s;
   }
-  .resource-list li:last-child { border-bottom: none; }
-  .resource-list .tag {
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 12px;
-    color: var(--ink-soft);
-    display: block;
-  }
-
-  .summary-block {
-    background: var(--navy);
-    color: #DDE1EA;
-    border-radius: 14px;
-    padding: 34px 32px;
-    margin-top: 8px;
-  }
-  .summary-block h2 { color: #FFFFFF; }
-  .summary-block p { color: #C4CAD8; }
-  .summary-block strong { color: #FFFFFF; }
+  .blog-btn:hover { background: var(--accent); transform: translateY(-2px); }
+  .blog-btn:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+  .blog-sub { margin-top: 14px; font-size: 12.5px; color: var(--mist); letter-spacing: 0.06em; }
 
   footer {
-    border-top: 1px solid var(--line);
-    margin-top: 24px;
-    padding: 30px 24px 48px;
+    margin-top: 56px;
+    font-size: 12px;
+    color: var(--steel);
+    letter-spacing: 0.08em;
   }
-  .footer-inner {
-    max-width: var(--max);
-    margin: 0 auto;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 13px;
-    color: var(--ink-soft);
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+  footer a { color: var(--mist); }
 
-  svg text { font-family: "IBM Plex Sans", sans-serif; }
-  .dt { font-size: 14px; font-weight: 600; }
-  .ds { font-size: 12px; font-weight: 400; }
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes spinR { to { transform: rotate(-360deg); } }
+    @keyframes arm   { 0%,100% { transform: rotate(-14deg); } 50% { transform: rotate(10deg); } }
+    @keyframes fore  { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(-8deg); } }
+    @keyframes blink { 0%, 78%, 100% { opacity: 1; } 82%, 96% { opacity: 0.15; } }
+    @keyframes spark { 0%, 100% { opacity: 0; } 45%, 55% { opacity: 1; } }
+    .gear-big    { animation: spin 9s linear infinite; }
+    .gear-small  { animation: spinR 6s linear infinite; }
+    .arm-upper   { animation: arm 4s ease-in-out infinite; }
+    .arm-fore    { animation: fore 4s ease-in-out infinite; }
+    .beacon      { animation: blink 3s linear infinite; }
+    .spark       { animation: spark 4s ease-in-out infinite; }
+  }
+  .gear-big   { transform-origin: 150px 150px; }
+  .gear-small { transform-origin: 258px 96px; }
+  .arm-upper  { transform-origin: 470px 240px; }
+  .arm-fore   { transform-origin: 470px 130px; }
 </style>
 </head>
 <body>
 
-<header class="masthead">
-  <div class="masthead-inner">
-    <div class="brand-row">
-      <img src="/e-yantra_logo.png" alt="e-Yantra — Engineering a better tomorrow" class="brand-logo" onerror="this.outerHTML='<span class=brand-name>e-Yantra</span>'">
-    </div>
-    <p class="eyebrow">Robotics · Foundation models · <b>Beginner friendly</b></p>
-    <h1>From ChatGPT to robots: an introduction to Vision-Language-Action models</h1>
-    <p class="dek">How a single neural network can see the world, understand plain-English instructions, and act — built up step by step from the LLM you already know.</p>
-    <p class="meta">Srivenkateshwar, Sahil Shinde · JULY 2026 · 12 MIN READ</p>
-  </div>
-</header>
+<div class="scene" role="img" aria-label="Animated scene of turning gears and a robot arm at work — the site is being built">
+<svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- ground line -->
+  <line x1="30" y1="286" x2="570" y2="286" stroke="#3B4459" stroke-width="2" stroke-linecap="round"/>
 
-<main>
+  <!-- big gear -->
+  <g class="gear-big">
+    <g fill="#3B4459">
+      <rect x="141" y="70" width="18" height="26" rx="4"/>
+      <rect x="141" y="204" width="18" height="26" rx="4"/>
+      <rect x="70" y="141" width="26" height="18" rx="4"/>
+      <rect x="204" y="141" width="26" height="18" rx="4"/>
+      <rect x="141" y="70" width="18" height="26" rx="4" transform="rotate(45 150 150)"/>
+      <rect x="141" y="204" width="18" height="26" rx="4" transform="rotate(45 150 150)"/>
+      <rect x="70" y="141" width="26" height="18" rx="4" transform="rotate(45 150 150)"/>
+      <rect x="204" y="141" width="26" height="18" rx="4" transform="rotate(45 150 150)"/>
+    </g>
+    <circle cx="150" cy="150" r="62" fill="#2C3549" stroke="#4A5470" stroke-width="3"/>
+    <circle cx="150" cy="150" r="20" fill="#232B3E" stroke="#4A5470" stroke-width="3"/>
+  </g>
 
-<section>
-  <p class="hook">ChatGPT can tell you how to make tea. A Vision-Language-Action model can actually walk to the kitchen and make it.</p>
-  <p class="lede">That single sentence captures the most exciting shift happening in robotics right now. For decades, teaching a robot to do anything required an engineer to program that exact task, step by step, for that exact environment. Vision-Language-Action (VLA) models throw that paradigm away: one neural network that sees through a camera, understands natural language, and outputs physical actions — no task-specific code at all.</p>
-  <p>This post builds up the idea from scratch. If you understand how ChatGPT works even loosely, you'll understand how VLAs work by the end. And if you don't, that's fine too — we start there.</p>
-</section>
+  <!-- small gear -->
+  <g class="gear-small">
+    <g fill="#4A5470">
+      <rect x="252" y="52" width="12" height="18" rx="3"/>
+      <rect x="252" y="122" width="12" height="18" rx="3"/>
+      <rect x="214" y="90" width="18" height="12" rx="3"/>
+      <rect x="284" y="90" width="18" height="12" rx="3"/>
+      <rect x="252" y="52" width="12" height="18" rx="3" transform="rotate(45 258 96)"/>
+      <rect x="252" y="122" width="12" height="18" rx="3" transform="rotate(45 258 96)"/>
+      <rect x="214" y="90" width="18" height="12" rx="3" transform="rotate(45 258 96)"/>
+      <rect x="284" y="90" width="18" height="12" rx="3" transform="rotate(45 258 96)"/>
+    </g>
+    <circle cx="258" cy="96" r="34" fill="#323C54" stroke="#5A6584" stroke-width="3"/>
+    <circle cx="258" cy="96" r="11" fill="#232B3E" stroke="#5A6584" stroke-width="3"/>
+  </g>
 
-<section>
-  <h2>What is a VLA?</h2>
-  <p>A Vision-Language-Action model combines three capabilities in a single neural network:</p>
-  <div class="pillars">
-    <div class="pillar"><h4>Vision</h4><p>Perceives the world through camera images and video. These are its eyes.</p></div>
-    <div class="pillar"><h4>Language</h4><p>Understands instructions like "pick up the red cube." This is how humans talk to it.</p></div>
-    <div class="pillar"><h4>Action</h4><p>Outputs motor commands — gripper positions, joint angles. These are its hands.</p></div>
-  </div>
-  <p>The crucial point: these are not three separate programs glued together. It is <strong>one model, trained end-to-end</strong>, where seeing, understanding, and acting share the same internal representation. That sharing is what makes generalization possible — and generalization is the whole game.</p>
-</section>
+  <!-- robot arm -->
+  <rect x="428" y="258" width="84" height="20" rx="6" fill="#3B4459"/>
+  <rect x="452" y="234" width="36" height="28" rx="6" fill="#4A5470"/>
+  <g class="arm-upper">
+    <rect x="458" y="126" width="24" height="120" rx="10" fill="#5A6584"/>
+    <circle cx="470" cy="240" r="15" fill="#2C3549" stroke="#7A85A4" stroke-width="3"/>
+    <g class="arm-fore">
+      <rect x="360" y="118" width="118" height="22" rx="10" fill="#7A85A4"/>
+      <circle cx="470" cy="130" r="12" fill="#2C3549" stroke="#9AA5C0" stroke-width="3"/>
+      <!-- gripper -->
+      <path d="M362 118 L340 104 M362 140 L340 152" stroke="#9AA5C0" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <!-- spark at gripper -->
+      <g class="spark">
+        <path d="M332 122 l-10 -8 M330 130 l-13 1 M333 138 l-10 9" stroke="#E8734F" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="336" cy="129" r="4" fill="#E8734F"/>
+      </g>
+    </g>
+  </g>
 
-<section>
-  <h2>Why this matters</h2>
-  <p>Before VLAs, robotics was dominated by task-specific programming. An engineer wrote explicit rules for every task: if the object is at position (x, y), move the arm to (x, y), close the gripper. Change the task, the object, or even the lighting, and the program breaks.</p>
-  <p>VLAs change the paradigm in four ways. <strong>One model handles many tasks</strong> — the same weights can pick, place, fold, and wipe; you just change the instruction. <strong>No programming for the end user</strong> — you talk to the robot the way you'd talk to a person. <strong>Generalization to the unseen</strong> — modern VLAs handle objects and rooms they were never trained on. And it's <strong>the foundation-model shift, but for robots</strong>: NLP already went from one model per task to one general model for everything. Robotics is now making the same jump.</p>
-</section>
+  <!-- beacon light -->
+  <circle class="beacon" cx="470" cy="228" r="4.5" fill="#E8734F"/>
 
-<section>
-  <span class="step-tag">Step 01</span>
-  <h2>The LLM foundation</h2>
-  <p>Everything starts with a plain large language model, because it is the backbone everything else attaches to.</p>
+  <!-- workpiece: half-built block wall -->
+  <g fill="#2C3549" stroke="#4A5470" stroke-width="2">
+    <rect x="60" y="262" width="44" height="22" rx="4"/>
+    <rect x="108" y="262" width="44" height="22" rx="4"/>
+    <rect x="84" y="238" width="44" height="22" rx="4"/>
+  </g>
+</svg>
+</div>
 
-  <figure>
-    <svg viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg">
-      <title>LLM basic flow</title>
-      <desc>Text input goes through a tokenizer into the LLM containing embeddings and a transformer, producing next-token prediction.</desc>
-      <defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8A887F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-      <rect x="40" y="122" width="110" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="95" y="144" text-anchor="middle" dominant-baseline="central" fill="#444441">Text input</text>
-      <text class="ds" x="95" y="162" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">"The cat sat…"</text>
-      <line x1="150" y1="150" x2="188" y2="150" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a1)"/>
-      <rect x="192" y="122" width="100" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.75"/>
-      <text class="dt" x="242" y="144" text-anchor="middle" dominant-baseline="central" fill="#085041">Tokenizer</text>
-      <text class="ds" x="242" y="162" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Text → tokens</text>
-      <line x1="292" y1="150" x2="330" y2="150" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a1)"/>
-      <rect x="334" y="50" width="200" height="200" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.75"/>
-      <text class="dt" x="354" y="76" dominant-baseline="central" fill="#3C3489">LLM</text>
-      <rect x="354" y="98" width="160" height="52" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.75"/>
-      <text class="dt" x="434" y="118" text-anchor="middle" dominant-baseline="central" fill="#72243E">Embeddings</text>
-      <text class="ds" x="434" y="135" text-anchor="middle" dominant-baseline="central" fill="#993556">Tokens → vectors</text>
-      <line x1="434" y1="150" x2="434" y2="166" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a1)"/>
-      <rect x="354" y="170" width="160" height="52" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.75"/>
-      <text class="dt" x="434" y="190" text-anchor="middle" dominant-baseline="central" fill="#72243E">Transformer</text>
-      <text class="ds" x="434" y="207" text-anchor="middle" dominant-baseline="central" fill="#993556">Attention layers</text>
-      <line x1="534" y1="150" x2="572" y2="150" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a1)"/>
-      <rect x="576" y="122" width="90" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="621" y="144" text-anchor="middle" dominant-baseline="central" fill="#444441">Output</text>
-      <text class="ds" x="621" y="162" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Next token</text>
-    </svg>
-    <figcaption><b>Figure 1.</b> The LLM pipeline: text becomes tokens, tokens become vectors, the transformer predicts the next token.</figcaption>
-  </figure>
+<h1>Srivenkateshwar</h1>
+<p class="status"><span class="dot"></span>Site under development</p>
+<p class="note">This page is being engineered — gears are turning, the robot arm is on it. The blog, however, is already live.</p>
 
-  <p>Take the sentence "The cat sat…". A <strong>tokenizer</strong> splits it into tokens — subword pieces — and maps each to an integer ID. One detail worth knowing: the tokenizer is not part of the neural network. It has no learned weights; it's a deterministic lookup table built with an algorithm like byte-pair encoding. The neural network proper begins at the <strong>embedding layer</strong>, which turns those integer IDs into vectors — the numerical language the transformer speaks.</p>
-  <p>The <strong>transformer</strong> is a stack of attention layers that let every token look at every other token and build contextual understanding. Its output is a prediction of the next token. Run that prediction in a loop and you get generated text.</p>
-  <div class="takeaway"><span class="step-tag">Takeaway</span>An LLM is a machine that takes tokens in and predicts the next token out. Everything that follows builds on this.</div>
-</section>
+<a class="blog-btn" href="blog/vla-introduction.html">Read the blog →</a>
+<p class="blog-sub">Latest: An introduction to Vision-Language-Action models</p>
 
-<section>
-  <span class="step-tag">Step 02</span>
-  <h2>From LLM to VLM — teaching the model to see</h2>
-  <p>A Vision-Language Model (VLM) adds a second input path to the same backbone. Images come from outside, get converted to tokens, and land in the same transformer as the text tokens.</p>
-
-  <figure>
-    <svg viewBox="0 0 680 310" role="img" xmlns="http://www.w3.org/2000/svg">
-      <title>VLM architecture</title>
-      <desc>Image input and text input enter a VLM container; a vision encoder and tokenizer convert them to tokens, and a transformer fuses them to produce text output.</desc>
-      <defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8A887F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-      <rect x="180" y="40" width="390" height="230" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.75"/>
-      <text class="dt" x="200" y="64" dominant-baseline="central" fill="#3C3489">VLM</text>
-      <rect x="35" y="80" width="115" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="92" y="102" text-anchor="middle" dominant-baseline="central" fill="#444441">Image input</text>
-      <text class="ds" x="92" y="120" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Camera frame</text>
-      <line x1="150" y1="108" x2="204" y2="108" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a2)"/>
-      <rect x="35" y="180" width="115" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="92" y="202" text-anchor="middle" dominant-baseline="central" fill="#444441">Text input</text>
-      <text class="ds" x="92" y="220" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">"What is this?"</text>
-      <line x1="150" y1="208" x2="204" y2="208" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a2)"/>
-      <rect x="208" y="80" width="142" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.75"/>
-      <text class="dt" x="279" y="102" text-anchor="middle" dominant-baseline="central" fill="#712B13">Vision encoder</text>
-      <text class="ds" x="279" y="120" text-anchor="middle" dominant-baseline="central" fill="#993C1D">Image → tokens</text>
-      <rect x="208" y="180" width="142" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.75"/>
-      <text class="dt" x="279" y="202" text-anchor="middle" dominant-baseline="central" fill="#085041">Tokenizer</text>
-      <text class="ds" x="279" y="220" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Text → tokens</text>
-      <path d="M350 108 H380 V145 H406" fill="none" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a2)"/>
-      <path d="M350 208 H380 V175 H406" fill="none" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a2)"/>
-      <rect x="410" y="130" width="140" height="60" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.75"/>
-      <text class="dt" x="480" y="152" text-anchor="middle" dominant-baseline="central" fill="#72243E">Transformer</text>
-      <text class="ds" x="480" y="170" text-anchor="middle" dominant-baseline="central" fill="#993556">Fuses tokens</text>
-      <line x1="550" y1="160" x2="594" y2="160" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a2)"/>
-      <rect x="598" y="132" width="72" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="634" y="154" text-anchor="middle" dominant-baseline="central" fill="#444441">Output</text>
-      <text class="ds" x="634" y="172" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Text</text>
-    </svg>
-    <figcaption><b>Figure 2.</b> A VLM is an LLM with a second input path: the vision encoder turns images into tokens, just as the tokenizer does for text.</figcaption>
-  </figure>
-
-  <p>The <strong>vision encoder</strong> is typically a pretrained Vision Transformer (ViT) such as CLIP or SigLIP. It slices the image into patches and converts them into "image tokens."</p>
-  <p>Notice the symmetry: the vision encoder does for images exactly what the tokenizer does for text — it converts raw input into tokens. And the transformer doesn't fundamentally care whether a token came from pixels or from words. Inside it, attention layers mix image tokens and text tokens freely, which is how the model can look at a photo and answer "What is this?"</p>
-  <p>One nuance: the symmetry is conceptual, not literal. The tokenizer is a fixed lookup table, but the vision encoder is itself a neural network with learned weights. There's also usually a small "projector" — a lightweight MLP — between the vision encoder and the LLM that reshapes image features to match the LLM's token dimension. Beginners can safely ignore both details on a first pass.</p>
-</section>
-
-<section>
-  <span class="step-tag">Step 03</span>
-  <h2>From VLM to VLA — teaching the model to act</h2>
-  <p>Now the payoff, and it's smaller than you might expect. Compare the diagram below with the previous one: <strong>everything upstream is identical.</strong> The only new component is the action head, and the text output has been replaced by robot actions.</p>
-
-  <figure>
-    <svg viewBox="0 0 680 310" role="img" xmlns="http://www.w3.org/2000/svg">
-      <title>VLA architecture</title>
-      <desc>Image input and a language instruction feed a VLA container; a vision encoder and tokenizer convert them to tokens, a transformer fuses them, and an action head outputs robot actions.</desc>
-      <defs><marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8A887F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-      <rect x="180" y="40" width="390" height="230" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.75"/>
-      <text class="dt" x="200" y="64" dominant-baseline="central" fill="#3C3489">VLA</text>
-      <rect x="35" y="80" width="115" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="92" y="102" text-anchor="middle" dominant-baseline="central" fill="#444441">Image input</text>
-      <text class="ds" x="92" y="120" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Camera frame</text>
-      <line x1="150" y1="108" x2="204" y2="108" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="35" y="180" width="115" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="92" y="202" text-anchor="middle" dominant-baseline="central" fill="#444441">Instruction</text>
-      <text class="ds" x="92" y="220" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">"Pick the cube"</text>
-      <line x1="150" y1="208" x2="204" y2="208" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="208" y="80" width="142" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.75"/>
-      <text class="dt" x="279" y="102" text-anchor="middle" dominant-baseline="central" fill="#712B13">Vision encoder</text>
-      <text class="ds" x="279" y="120" text-anchor="middle" dominant-baseline="central" fill="#993C1D">Image → tokens</text>
-      <rect x="208" y="180" width="142" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.75"/>
-      <text class="dt" x="279" y="202" text-anchor="middle" dominant-baseline="central" fill="#085041">Tokenizer</text>
-      <text class="ds" x="279" y="220" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Text → tokens</text>
-      <path d="M350 108 H375 V118 H396" fill="none" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <path d="M350 208 H375 V132 H396" fill="none" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="400" y="96" width="150" height="56" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.75"/>
-      <text class="dt" x="475" y="118" text-anchor="middle" dominant-baseline="central" fill="#72243E">Transformer</text>
-      <text class="ds" x="475" y="136" text-anchor="middle" dominant-baseline="central" fill="#993556">Fuses tokens</text>
-      <line x1="475" y1="152" x2="475" y2="172" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="400" y="176" width="150" height="56" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.75"/>
-      <text class="dt" x="475" y="198" text-anchor="middle" dominant-baseline="central" fill="#633806">Action head</text>
-      <text class="ds" x="475" y="216" text-anchor="middle" dominant-baseline="central" fill="#854F0B">Tokens → actions</text>
-      <line x1="550" y1="204" x2="584" y2="204" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a3)"/>
-      <rect x="588" y="176" width="80" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="628" y="198" text-anchor="middle" dominant-baseline="central" fill="#444441">Actions</text>
-      <text class="ds" x="628" y="216" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Robot arm</text>
-    </svg>
-    <figcaption><b>Figure 3.</b> A VLA is a VLM with the text output swapped for an action head. Everything upstream is unchanged.</figcaption>
-  </figure>
-
-  <p>The text input is now a command ("Pick the cube") instead of a question. The <strong>action head</strong> translates the transformer's internal decision into motor commands: gripper position, arm joint angles, movement deltas.</p>
-  <p>Different models implement the action head differently:</p>
-  <ul>
-    <li><strong>Discrete action tokens</strong> (RT-2, OpenVLA): actions are literally output as tokens, using the same next-token mechanism the LLM already has. The robot's vocabulary simply gains "action words."</li>
-    <li><strong>Continuous action heads</strong> (π0, Octo): a separate diffusion or flow-matching head outputs smooth, continuous joint values, which suits fine motor control like folding cloth.</li>
-  </ul>
-  <div class="takeaway"><span class="step-tag">Takeaway</span>A VLA reuses a VLM's brain and teaches it to speak "robot" instead of English.</div>
-</section>
-
-<section>
-  <span class="step-tag">Step 04</span>
-  <h2>The feedback loop — why robotics is harder than chat</h2>
-  <p>A chatbot's job ends when it prints text. A robot's output <em>changes the world</em> — and that changed world becomes its next input.</p>
-
-  <figure>
-    <svg viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg">
-      <title>VLA feedback loop</title>
-      <desc>A four-stage cycle: camera observation feeds the VLA model, which sends actions to the robot, whose movements change the environment, producing a new observation.</desc>
-      <defs><marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8A887F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-      <rect x="80" y="60" width="160" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="160" y="82" text-anchor="middle" dominant-baseline="central" fill="#444441">Observation</text>
-      <text class="ds" x="160" y="100" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Camera image</text>
-      <line x1="240" y1="88" x2="436" y2="88" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a4)"/>
-      <rect x="440" y="60" width="160" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.75"/>
-      <text class="dt" x="520" y="82" text-anchor="middle" dominant-baseline="central" fill="#3C3489">VLA model</text>
-      <text class="ds" x="520" y="100" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Decides action</text>
-      <line x1="520" y1="116" x2="520" y2="196" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a4)"/>
-      <rect x="440" y="200" width="160" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.75"/>
-      <text class="dt" x="520" y="222" text-anchor="middle" dominant-baseline="central" fill="#712B13">Robot</text>
-      <text class="ds" x="520" y="240" text-anchor="middle" dominant-baseline="central" fill="#993C1D">Executes action</text>
-      <line x1="436" y1="228" x2="244" y2="228" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a4)"/>
-      <rect x="80" y="200" width="160" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.75"/>
-      <text class="dt" x="160" y="222" text-anchor="middle" dominant-baseline="central" fill="#444441">Environment</text>
-      <text class="ds" x="160" y="240" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Scene changes</text>
-      <line x1="160" y1="196" x2="160" y2="120" stroke="#8A887F" stroke-width="1.5" marker-end="url(#a4)"/>
-      <text class="ds" x="340" y="162" text-anchor="middle" dominant-baseline="central" fill="#8A887F">↻ loop runs many times per second</text>
-    </svg>
-    <figcaption><b>Figure 4.</b> The perception-action loop: sense, think, act, and the changed world comes back as the next observation.</figcaption>
-  </figure>
-
-  <p>Two consequences follow. First, <strong>mistakes compound</strong>: if the robot grabs badly, the next camera frame shows the cube in the wrong place, and the model must notice and correct. Second, that is exactly why the loop runs continuously — typically several times per second, from a few Hz up to 50+ Hz depending on the model. The robot doesn't plan once and execute blindly; it re-observes and re-decides constantly, correcting as it goes.</p>
-  <p>This closed loop is the fundamental reason embodied AI is harder than chat — and the reason demos of robots recovering from their own mistakes are so impressive.</p>
-</section>
-
-<section>
-  <h2>A concrete example: π0</h2>
-  <p>To make this concrete, consider <strong>π0</strong> from Physical Intelligence — one of the most capable open VLAs. It follows the exact recipe above with real components filled in: a SigLIP vision encoder, a PaliGemma VLM backbone (about 3B parameters), and a flow-matching action head that outputs chunks of 50 actions at a time for smooth control. Trained on diverse robot data, it can fold laundry, clear tables, and — in its π0.5 version — clean kitchens and bedrooms it has never seen before. The demo videos on the <a href="https://www.pi.website/blog/pi05" rel="noopener">Physical Intelligence blog</a> are worth a watch; seeing a robot generalize to a brand-new home makes the point better than any diagram.</p>
-</section>
-
-<section>
-  <h2>VLAs in the real world</h2>
-  <h3>Manipulation and household robotics</h3>
-  <p>Physical Intelligence's π0/π0.5 handle laundry, table clearing, and cleaning in unseen homes. Google DeepMind's RT-2 pioneered the "actions as tokens" approach, and Gemini Robotics extends Gemini's reasoning into dexterous physical tasks. Figure's Helix drives humanoid robots' full upper bodies, including fingers, and lets two robots collaborate on tasks like putting away groceries.</p>
-  <h3>Industrial and logistics</h3>
-  <p>Warehouse pick-and-place with unstructured, never-before-seen objects is where traditional automation fails and VLA-style generalization shines — bin picking and package sorting across endless variation in shape and packaging.</p>
-  <h3>Beyond robot arms</h3>
-  <p>The recipe isn't limited to grippers. End-to-end autonomous driving research follows the same pattern (camera in, language-grounded reasoning, control out). And the "action" need not be physical at all: computer-use agents that see a screen and click buttons are VLAs whose body is a browser.</p>
-</section>
-
-<section>
-  <h2>Where to go next</h2>
-  <h3>Papers, in reading order</h3>
-  <ul class="resource-list">
-    <li><strong>RT-1</strong> (Google, 2022)<span class="tag">The precursor: a transformer for robot control at scale</span></li>
-    <li><strong>RT-2</strong> (Google DeepMind, 2023)<span class="tag">Coined "vision-language-action model" — read the blog post first, it has the intuition</span></li>
-    <li><strong>OpenVLA</strong> (2024)<span class="tag">A 7B open-source VLA you can download, run, and fine-tune — the best hands-on start</span></li>
-    <li><strong>π0</strong> (Physical Intelligence, 2024)<span class="tag">Flow-matching action head over a VLM backbone; open-sourced as openpi</span></li>
-    <li><strong>Octo</strong> (UC Berkeley, 2024)<span class="tag">A lightweight open generalist policy — transformer control without huge compute</span></li>
-  </ul>
-  <h3>Datasets and benchmarks</h3>
-  <p><strong>Open X-Embodiment</strong> — 1M+ trajectories across 22 robot types, the dataset most modern VLAs train on. <strong>LIBERO</strong> and <strong>SimplerEnv</strong> — simulation benchmarks for evaluating policies without hardware.</p>
-  <h3>Hands-on</h3>
-  <p>The easiest practical entry is Hugging Face's <strong>LeRobot</strong> — an open-source library with pretrained policies, datasets, tutorials, and support for low-cost hardware like the SO-100/SO-101 arm, so you can train a real policy on real hardware for a couple hundred dollars. If you have a decent GPU, the OpenVLA and openpi repos let you run full-scale VLAs. No hardware at all? MuJoCo and Isaac Sim have you covered.</p>
-  <p><strong>A suggested path:</strong> read the RT-2 blog post → install LeRobot and run a pretrained policy in simulation → fine-tune a small policy on a LIBERO task → and if budget allows, build an SO-101 arm and train on your own real data.</p>
-</section>
-
-<section class="summary-block">
-  <h2>The whole story in four sentences</h2>
-  <p>An LLM is a next-token predictor over text. A VLM adds a vision encoder so images become tokens too, letting the same backbone see. A VLA swaps the text output for an action head, so the model's "words" become motor commands. Wrap it in a perception-action loop running many times per second, and you have a robot that sees, understands, and acts — <strong>without a single line of task-specific code.</strong></p>
-</section>
-
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <span>© 2026 · Srivenkateshwar, Sahil Shinde</span>
-    <span>Based on a lecture prepared for e-Yantra, IIT Bombay</span>
-  </div>
-</footer>
+<footer>© 2026 Srivenkateshwar · <a href="https://github.com/Srivenkateshwar" rel="noopener">GitHub</a></footer>
 
 </body>
 </html>
