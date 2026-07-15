@@ -86,3 +86,44 @@ html.navy .content blockquote, html.ayu .content blockquote, html.coal .content 
 
 /* ---------- Big numbered lists a touch tighter ---------- */
 .content ol li, .content ul li { margin-bottom: 6px; }
+
+/* ==========================================================
+   STANDALONE MODE — hide all mdBook chrome (sidebar, menubar,
+   search, prev/next arrows) so pages read as a plain blog.
+   Delete this whole section to bring the mdBook UI back.
+   ========================================================== */
+#sidebar, #sidebar-toggle, #sidebar-resize-handle,
+#menu-bar, #menu-bar-hover-placeholder,
+.nav-chapters, .nav-wrapper, #searchbar, #searchresults-outer {
+  display: none !important;
+}
+.page-wrapper, .page {
+  transform: none !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+html.sidebar-visible .page-wrapper { transform: none !important; }
+.content {
+  padding: 0 24px 48px;
+  margin: 0 auto;
+}
+.content main { margin: 0 auto; }
+
+/* ---------- Navy masthead: the first H1 becomes a banner ---------- */
+.content main h1:first-of-type {
+  background: var(--sv-navy);
+  color: #F2F3F6;
+  padding: 44px 38px 36px;
+  border-radius: 16px;
+  margin: 24px 0 14px;
+  font-size: 1.9em;
+}
+.content main h1:first-of-type a { color: inherit; }
+
+/* Home link line (first paragraph when it's just a back-link) */
+.content main > p:first-child {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  margin: 18px 0 0;
+}

@@ -1,3 +1,5 @@
+[← Home](../home.md)
+
 # From ChatGPT to Robots: A Beginner's Introduction to Vision-Language-Action Models
 
 <img src="./eyantra-logo.png" alt="e-Yantra — Engineering a better tomorrow" style="height:44px;background:#fff;border-radius:6px;padding:5px 10px;" />
