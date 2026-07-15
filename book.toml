@@ -5,6 +5,7 @@ language = "en"
 src = "src"
 
 [output.html]
-default-theme = "navy"
+default-theme = "light"
 preferred-dark-theme = "navy"
+additional-css = ["custom.css"]
 git-repository-url = "https://github.com/Srivenkateshwar/vla"
