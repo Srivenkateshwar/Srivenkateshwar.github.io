@@ -2,7 +2,7 @@
 
 <img src="./eyantra-logo.png" alt="e-Yantra — Engineering a better tomorrow" style="height:44px;background:#fff;border-radius:6px;padding:5px 10px;" />
 
-*July 2026 · 12 min read*
+*Srivenkateshwar,Sahil ShindeJuly 2026 · 12 min read*
 
 > ChatGPT can tell you how to make tea. A Vision-Language-Action model can actually walk to the kitchen and make it.
 
